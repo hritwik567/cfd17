@@ -31,6 +31,7 @@ app.use(cookieParser());
 app.use('/public',express.static(path.join(__dirname, 'public')));
 
 app.use('/',dashboard);
+app.use('/dashboard',dashboard);
 app.use('/search', search);
 
 app.post('/add_journey',function(req,res){
