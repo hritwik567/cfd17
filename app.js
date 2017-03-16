@@ -54,7 +54,20 @@ app.post('/search_result',function(req,res){
   if(req.body.date!==""){
     query.date = req.body.date;
   }
-  db.collection('journey').find(query).toArray(function(err,result){
+  if(req.body.time!==""){
+    var a =  req.body.time.split(":")[0]-1;
+    var b = (Number(req.body.time.split(":")[0])+1)%24;
+    if(a<10){
+      a = "0" + a.toString();
+    }
+    if(b<10){
+      b = "0" + b.toString(); 
+    }
+    a = a + ":" + req.body.time.split(":")[1];
+    b = b + ":" + req.body.time.split(":")[1];
+    query.time = {$lte:b, $gte:a};
+  }
+  db.collection('journey').find(query).sort({ time : 1}).toArray(function(err,result){
     if(err) return console.log(err);
     res.render('search_result.ejs',{output : result});
   });
